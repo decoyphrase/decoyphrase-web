@@ -72,7 +72,6 @@ export function useLiveMetrics(options: UseLiveMetricsOptions = {}): UseLiveMetr
 
   const metricsData = data;
 
-
   return {
     data: metricsData ?? INITIAL_DATA,
     isConnected: !isError, // Simplified mapping: no error = "connected"

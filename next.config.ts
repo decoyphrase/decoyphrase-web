@@ -18,7 +18,6 @@ const nextConfig: NextConfig = {
     ],
   },
 
-
   // Experimental features
   experimental: {
     // Enable server actions
