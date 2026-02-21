@@ -1,0 +1,62 @@
+# =========================================
+# Decoy Phrase Landing Platform
+# Docker Compose for Local Development
+# =========================================
+
+version: '3.8'
+
+services:
+  # -----------------------------------------
+  # Next.js Application
+  # -----------------------------------------
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: decoyphrase-web
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=production
+      - UPSTASH_REDIS_REST_URL=${UPSTASH_REDIS_REST_URL}
+      - UPSTASH_REDIS_REST_TOKEN=${UPSTASH_REDIS_REST_TOKEN}
+    depends_on:
+      - redis
+    restart: unless-stopped
+    networks:
+      - decoyphrase-network
+
+  # -----------------------------------------
+  # Redis (Local Development Only)
+  # In production, use Upstash
+  # -----------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: decoyphrase-redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+    networks:
+      - decoyphrase-network
+
+# -----------------------------------------
+# Development Override (use with docker-compose.dev.yml)
+# -----------------------------------------
+# web-dev:
+#   build:
+#     context: .
+#     target: deps
+#   volumes:
+#     - .:/app
+#     - /app/node_modules
+#   command: npm run dev
+
+networks:
+  decoyphrase-network:
+    driver: bridge
+
+volumes:
+  redis-data:
