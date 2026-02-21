@@ -5,6 +5,7 @@ import { DonationCard, StorageCalculator } from '@/components/features/donation'
 import { STORAGE_FUND_WALLET, TEAM_FUND_WALLETS } from '@/constants/pricing';
 import { useLanguageStore } from '@/lib/store/language';
 import { useQuery } from '@tanstack/react-query';
+import { fetchDonationData } from '@/lib/services/donations';
 
 import { PageGradient } from '@/components/ui';
 
@@ -32,12 +33,8 @@ export function DonatePageContent() {
 
   const { data } = useQuery<DonationData>({
     queryKey: ['donations'],
-    queryFn: async () => {
-      const res = await fetch('/api/donations');
-      if (!res.ok) throw new Error('Failed to fetch donation data');
-      return res.json();
-    },
-    // Refresh every 5 minutes (user-side), though API caches for 5 mins too.
+    queryFn: () => fetchDonationData(),
+    // Refresh every 5 minutes (user-side)
     staleTime: 1000 * 60 * 5,
   });
 

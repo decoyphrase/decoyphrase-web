@@ -19,6 +19,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { SOCIAL_LINKS } from '@/constants/links';
 import { useLanguageStore } from '@/lib/store/language';
 import { PageGradient } from '@/components/ui';
+import { submitFeedback } from '@/lib/services/feedback';
 
 // =============================================================================
 // Zod Schemas Factory
@@ -264,18 +265,7 @@ function FeedbackForm() {
     setSubmitStatus('idle');
 
     try {
-      const response = await fetch('/api/feedback', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'feedback',
-          data,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('API submission failed');
-      }
+      await submitFeedback('feedback', data);
 
       setSubmitStatus('success');
       form.reset();
@@ -383,18 +373,7 @@ function SupportForm() {
     setSubmitStatus('idle');
 
     try {
-      const response = await fetch('/api/feedback', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'support',
-          data,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('API submission failed');
-      }
+      await submitFeedback('support', data);
 
       setSubmitStatus('success');
       form.reset();
