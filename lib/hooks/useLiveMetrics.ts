@@ -6,7 +6,8 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import type { ApiResponse, LiveMetrics } from '@/types';
+import type { LiveMetrics } from '@/types';
+import { fetchLiveMetrics } from '@/lib/services/metrics';
 
 // =============================================================================
 // Types
@@ -17,8 +18,6 @@ export type MetricsData = LiveMetrics;
 interface UseLiveMetricsOptions {
   /** Polling interval in ms (default: 30000 = 30s) */
   pollingInterval?: number;
-  /** Enable mock data for development (default: false) */
-  useMockData?: boolean;
 }
 
 interface UseLiveMetricsReturn {
@@ -62,22 +61,17 @@ const INITIAL_DATA: MetricsData = {
 export function useLiveMetrics(options: UseLiveMetricsOptions = {}): UseLiveMetricsReturn {
   const { pollingInterval = 30000 } = options;
 
-  const { data, error, isFetching, isError } = useQuery<ApiResponse<LiveMetrics>, Error>({
+  const { data, error, isFetching, isError } = useQuery<LiveMetrics, Error>({
     queryKey: ['metrics'],
-    queryFn: async () => {
-      const res = await fetch('/api/metrics');
-      if (!res.ok) {
-        throw new Error(`Metrics fetch failed: ${res.status}`);
-      }
-      return res.json();
-    },
+    queryFn: () => fetchLiveMetrics(),
     refetchInterval: pollingInterval,
     // Keep data fresh for 29s to allow re-fetching just before 30s
     staleTime: pollingInterval - 1000,
     retry: 3,
   });
 
-  const metricsData = data?.success ? data.data : null;
+  const metricsData = data;
+
 
   return {
     data: metricsData ?? INITIAL_DATA,

@@ -1,14 +1,15 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  // Enable standalone output for Docker deployments
-  output: 'standalone',
+  // Static export for Arlink/Arweave
+  output: 'export',
 
   // React strict mode for better development experience
   reactStrictMode: true,
 
-  // Optimize images from external sources
+  // Disable image optimization for static export
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
@@ -16,6 +17,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+
 
   // Experimental features
   experimental: {
