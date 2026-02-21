@@ -14,44 +14,45 @@ export interface PlatformInfo {
   fileSize?: string;
 }
 
-/**
- * Available platforms for download
- */
 export const platforms: PlatformInfo[] = [
   {
     id: 'macos',
     name: 'MacOS',
     category: 'Desktop',
     description: 'Transform and recover your original seed phrase anytime.',
-    downloadUrl: 'https://drive.google.com/uc?export=download&id=1xmWgNoYhGFadbraC8Gu1ZdlHLaT3lUf7',
+    downloadUrl:
+      'https://github.com/decoyphrase/decoyphrase-app/releases/download/v2.0.8/decoyphrase-app-v2.0.8-macos.zip',
     icon: 'apple',
-    version: '1.0.18',
+    version: '2.0.8',
   },
   {
     id: 'windows',
     name: 'Windows',
     category: 'Desktop',
     description: 'Transform and recover your original seed phrase anytime.',
-    downloadUrl: 'https://drive.google.com/uc?export=download&id=1cNfAgorptgj_q6O-OXzaoDtPKOEY84cp',
+    downloadUrl:
+      'https://github.com/decoyphrase/decoyphrase-app/releases/download/v2.0.8/decoyphrase-app-v2.0.8-windows.zip',
     icon: 'windows',
-    version: '1.0.18',
+    version: '2.0.8',
   },
   {
     id: 'linux',
     name: 'Linux',
     category: 'Desktop',
     description: 'Transform and recover your original seed phrase anytime.',
-    downloadUrl: 'https://drive.google.com/uc?export=download&id=1D_S_BqIwCMU-WB997CvIWh3Cw9vAFT86',
+    downloadUrl:
+      'https://github.com/decoyphrase/decoyphrase-app/releases/download/v2.0.8/decoyphrase-app-v2.0.8-.linux.zip',
     icon: 'linux',
-    version: '1.0.18',
+    version: '2.0.8',
   },
   {
     id: 'android',
     name: 'Android',
     category: 'Mobile',
     description: 'Transform and recover your original seed phrase anytime.',
-    downloadUrl: 'https://drive.google.com/uc?export=download&id=1xlD4jRF0BeB3vfBEU1ob3ngviDxKekTc',
+    downloadUrl:
+      'https://github.com/decoyphrase/decoyphrase-app/releases/download/v2.0.8/decoyphrase-app-v2.0.8-android.zip',
     icon: 'android',
-    version: '1.0.18',
+    version: '2.0.8',
   },
 ];

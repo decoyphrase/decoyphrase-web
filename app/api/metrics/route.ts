@@ -40,7 +40,7 @@ export const runtime = 'edge';
 async function getGithubStats() {
   try {
     const res = await fetch(
-      'https://api.github.com/repos/decoyphrase/decoyphrase-desktop/releases/latest',
+      'https://api.github.com/repos/decoyphrase/decoyphrase-app/releases/latest',
       {
         next: { revalidate: 3600 }, // 1 hour cache
         headers: { Accept: 'application/vnd.github.v3+json' },
@@ -49,13 +49,7 @@ async function getGithubStats() {
 
     if (!res.ok) {
       if (res.status === 404) {
-        // Repo not found or private (dev mode), return mocks silently
-        return {
-          windows: 0,
-          macos: 0,
-          linux: 0,
-          android: 0,
-        };
+        return { windows: 0, macos: 0, linux: 0, android: 0 };
       }
       throw new Error(`GitHub fetch failed: ${res.status}`);
     }
@@ -79,28 +73,18 @@ async function getGithubStats() {
       const name = asset.name.toLowerCase();
       const count = asset.download_count || 0;
 
-      if (name.endsWith('.exe')) downloads.windows += count;
-      else if (name.endsWith('.dmg') || name.endsWith('.pkg')) downloads.macos += count;
-      else if (
-        name.endsWith('.snap') ||
-        name.endsWith('.deb') ||
-        name.endsWith('.rpm') ||
-        name.endsWith('.AppImage')
-      )
+      if (name.includes('windows') || name.endsWith('.exe')) downloads.windows += count;
+      else if (name.includes('macos') || name.endsWith('.dmg') || name.endsWith('.pkg'))
+        downloads.macos += count;
+      else if (name.includes('linux') || name.endsWith('.appimage') || name.endsWith('.deb'))
         downloads.linux += count;
-      else if (name.endsWith('.apk')) downloads.android += count;
+      else if (name.includes('android') || name.endsWith('.apk')) downloads.android += count;
     });
 
     return downloads;
   } catch (e) {
     console.error('GitHub Stats Error:', e);
-    // Fallback to previous mock if live fetch fails (or 0)
-    return {
-      windows: 0,
-      macos: 0,
-      linux: 0,
-      android: 0,
-    };
+    return { windows: 0, macos: 0, linux: 0, android: 0 };
   }
 }
 
