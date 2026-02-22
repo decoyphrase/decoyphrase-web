@@ -42,7 +42,7 @@ export const mainNavItems: ReadonlyArray<NavItem> = [
     label: 'products',
     children: [
       { label: 'decoyGenerator', href: '/download' },
-      { label: 'permanentStorage', href: 'https://decoyphrase.vercel.app/' },
+      { label: 'permanentStorage', href: 'https://decoyphrasestorage.arweave.net/' },
       {
         label: 'permanentWeb',
         href: 'https://decoy-phrase.gitbook.io/documentation-decoy-phrase/products-and-features/permanent-web',

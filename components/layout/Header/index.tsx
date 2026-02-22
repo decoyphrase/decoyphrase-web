@@ -57,7 +57,7 @@ export function Header() {
 
           {/* Login Button */}
           <a
-            href="https://decoyphrase.vercel.app/"
+            href="https://decoyphrasestorage.arweave.net/"
             className="bg-muted hover:bg-foreground hover:text-background hidden items-center justify-center rounded-none px-6 py-2 text-sm font-bold tracking-widest uppercase transition-all sm:inline-flex"
           >
             {t.header.login}

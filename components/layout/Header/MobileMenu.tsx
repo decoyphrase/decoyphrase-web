@@ -113,7 +113,7 @@ export function MobileMenu({ isOpen, onClose, items }: MobileMenuProps) {
         {/* Footer Actions */}
         <div className="border-border bg-background absolute right-0 bottom-0 left-0 border-t p-4">
           <a
-            href="https://decoyphrase.vercel.app/"
+            href="https://decoyphrasestorage.arweave.net/"
             className="bg-foreground text-background hover:bg-foreground/80 block w-full rounded-none py-3 text-center font-bold tracking-widest uppercase transition-all"
           >
             {t.header.login}

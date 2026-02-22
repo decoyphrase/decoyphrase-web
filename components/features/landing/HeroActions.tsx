@@ -70,7 +70,7 @@ export function HeroActions() {
               {t.heroActions.generator}
             </Link>
             <Link
-              href="https://decoyphrase.vercel.app/"
+              href="https://decoyphrasestorage.arweave.net/"
               className="text-card-foreground hover:bg-muted flex items-center gap-3 px-4 py-3 text-sm transition-colors"
             >
               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
