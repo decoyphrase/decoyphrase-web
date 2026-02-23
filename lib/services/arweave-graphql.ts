@@ -15,6 +15,10 @@ interface TransactionNode {
   owner: {
     address: string;
   };
+  tags?: {
+    name: string;
+    value: string;
+  }[];
 }
 
 interface TransactionEdge {
@@ -137,6 +141,10 @@ export async function getArweaveStats(): Promise<ArweaveStats> {
             quantity {
                winston
             }
+            tags {
+              name
+              value
+            }
           }
         }
       }
@@ -159,38 +167,27 @@ export async function getArweaveStats(): Promise<ArweaveStats> {
     // Calculate Total Files
     const totalFiles = fileNodes.length;
 
-    // Calculate Unique Users (Owners of the files? Or people who donated?)
-    // The previous logic counted owners of FILE transactions, which are... us (the app wallet).
-    // Wait, filesQuery has `owners: ["${address}"]`. The owner IS the wallet.
-    // So distinct owners will always be 1 (the app wallet) if we filter by our owner.
-    // Ah, the previous code in `arweave-graphql.ts` was:
-    // `owners: ["${address}"]` ...
-    // `const validOwners = fileEdges.map((edge) => edge.node.owner?.address)`
-    // This basically counts how many times WE uploaded?
-    // User count usually implies distinct users who used the app?
-    // But if the app uploads on behalf of users using the storage fund wallet...
-    // The storage fund wallet pays. The `owner` of the tx is the storage fund wallet.
-    // Where is the user info? Maybe in tags?
-    // If the user connects their OWN wallet to pay, then `owners` shouldn't be our wallet.
-    // But this `getArweaveStats` seems to track "Stats of the Protocol/App".
-    // If we pay for them, we are the owner.
-    // Let's stick to the previous logical implementation but fixed for pagination.
-    // Previous implementation: `owners: ["${address}"]` -> `uniqueUsersCount = new Set(validOwners).size`.
-    // Valid owners would just be [our_address, our_address...]. Size = 1.
-    // Maybe `totalFiles` is useful, but `totalUsers` might be 1 if we are the only signer.
-    // Let's keep the logic but maybe it's intended to be "People who donated"?
-    // Donations query: `recipients: ["${address}"]`. The `owner` of those txs are the donors.
-    // Let's count unique donors from donationNodes! That makes more sense for "Total Users" (or total supporters).
+    // Changing logic to count unique users by reading the "Owner" tag embedded in our files
+    // alongside unique "donors" which may not have uploaded anything but paid anyway.
+    const uniqueUserHashes = new Set<string>();
+    fileNodes.forEach((node) => {
+      if (node.tags) {
+        const ownerTag = node.tags.find((t) => t.name === 'Owner');
+        if (ownerTag && ownerTag.value) {
+          uniqueUserHashes.add(ownerTag.value);
+        }
+      }
+    });
 
-    // Changing logic to count unique DONORS as users, because counting our own address as users (from files) seems wrong if we are the signer.
-    // Unless the query was meant to be different. The previous code queried files with `owners: [address]`.
+    const uniqueDonors = new Set(donationNodes.map((node) => node.owner.address));
 
-    const uniqueDonors = new Set(donationNodes.map((node) => node.owner.address)).size;
+    const totalUsersSet = new Set([...Array.from(uniqueUserHashes), ...Array.from(uniqueDonors)]);
+    const totalUsersCount = totalUsersSet.size;
 
     return {
       totalDonationsWinston: totalDonationsWinston.toString(),
       totalFiles,
-      totalUsers: uniqueDonors > 0 ? uniqueDonors : 0, // Fallback to 0 if none
+      totalUsers: totalUsersCount > 0 ? totalUsersCount : 0, // Fallback to 0 if none
     };
   } catch (error) {
     console.error('Arweave GraphQL Error:', error);

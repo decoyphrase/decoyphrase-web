@@ -27,7 +27,7 @@ export const siteConfig = {
   links: {
     twitter: 'https://twitter.com/decoyphrase',
     github: 'https://github.com/decoyphrase',
-    discord: 'https://discord.gg/eQRBtGz5mA',
+    discord: 'https://discord.gg/q9cYTxtagJ',
   },
 
   // Creator/Author

@@ -63,7 +63,7 @@ export const mainNavItems: ReadonlyArray<NavItem> = [
     children: [
       { label: 'twitter', href: 'https://twitter.com/decoyphrase', external: true },
       { label: 'youtube', href: 'https://youtube.com/@decoyphrase', external: true },
-      { label: 'discord', href: 'https://discord.gg/eQRBtGz5mA', external: true },
+      { label: 'discord', href: 'https://discord.gg/q9cYTxtagJ', external: true },
       { label: 'github', href: 'https://github.com/decoyphrase', external: true },
       { label: 'feedback', href: '/feedback' },
     ],

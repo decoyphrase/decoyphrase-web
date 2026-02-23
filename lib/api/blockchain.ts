@@ -77,7 +77,7 @@ export class BlockchainClient {
   private static async getArweaveBalance(address: string): Promise<number> {
     try {
       const res = await fetch(`https://arweave.net/wallet/${address}/balance`, {
-        next: { revalidate: 300 }, // 5 min cache
+        next: { revalidate: 30 }, // 30 sec cache
       });
       if (!res.ok) throw new Error(`Arweave fetch failed: ${res.statusText}`);
       const winston = await res.text();
@@ -89,26 +89,38 @@ export class BlockchainClient {
   }
 
   private static async getSolanaBalance(address: string): Promise<number> {
-    try {
-      const res = await fetch('https://api.mainnet-beta.solana.com', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          jsonrpc: '2.0',
-          id: 1,
-          method: 'getBalance',
-          params: [address],
-        }),
-        next: { revalidate: 300 },
-      });
+    const rpcUrls = [
+      'https://api.mainnet-beta.solana.com',
+      'https://solana-rpc.publicnode.com',
+      'https://rpc.ankr.com/solana',
+    ];
 
-      const data = (await res.json()) as JsonRpcResponse<{ value: number }>;
-      if (data.error) throw new Error(data.error.message);
-      return TO_SOL(data.result.value);
-    } catch (e) {
-      console.error('Solana RPC Error', e);
-      return 0;
+    for (const rpcUrl of rpcUrls) {
+      try {
+        const res = await fetch(rpcUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            jsonrpc: '2.0',
+            id: 1,
+            method: 'getBalance',
+            params: [address],
+          }),
+          next: { revalidate: 30 },
+        });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const data = (await res.json()) as JsonRpcResponse<{ value: number }>;
+        if (data.error) throw new Error(data.error.message);
+        return TO_SOL(data.result.value);
+      } catch (e) {
+        console.warn(`Solana RPC Error (${rpcUrl}):`, e);
+      }
     }
+
+    console.error('All Solana RPCs failed.');
+    return 0;
   }
 
   private static async getEvmBalance(chain: string, address: string): Promise<number> {
@@ -144,7 +156,7 @@ export class BlockchainClient {
             method: 'eth_getBalance',
             params: [address, 'latest'],
           }),
-          next: { revalidate: 300 },
+          next: { revalidate: 30 },
         });
 
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -166,7 +178,7 @@ export class BlockchainClient {
   private static async getBitcoinBalance(address: string): Promise<number> {
     try {
       const res = await fetch(`https://mempool.space/api/address/${address}`, {
-        next: { revalidate: 300 },
+        next: { revalidate: 30 },
       });
       if (!res.ok) throw new Error(`Bitcoin fetch failed: ${res.statusText}`);
 
@@ -195,7 +207,7 @@ export class BlockchainClient {
           method: 'suix_getBalance',
           params: { owner: address },
         }),
-        next: { revalidate: 300 },
+        next: { revalidate: 30 },
       });
 
       const data = (await res.json()) as JsonRpcResponse<{ totalBalance: string }>;

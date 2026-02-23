@@ -282,6 +282,6 @@ export function ComponentName({ propName }: ComponentNameProps) {
 ## Questions?
 
 - Open an issue for bugs or feature requests
-- Join our [Discord](https://discord.gg/eQRBtGz5mA) for discussions
+- Join our [Discord](https://discord.gg/q9cYTxtagJ) for discussions
 
 Thank you for contributing! 🎉

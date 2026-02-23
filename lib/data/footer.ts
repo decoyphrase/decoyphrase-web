@@ -71,7 +71,7 @@ export const footerColumns: FooterColumn[] = [
 export const socialLinks: SocialLink[] = [
   { platform: 'twitter', href: 'https://twitter.com/decoyphrase', label: 'Follow us on X' },
   { platform: 'youtube', href: 'https://youtube.com/@decoyphrase', label: 'Watch on YouTube' },
-  { platform: 'discord', href: 'https://discord.gg/eQRBtGz5mA', label: 'Join Discord' },
+  { platform: 'discord', href: 'https://discord.gg/q9cYTxtagJ', label: 'Join Discord' },
   { platform: 'github', href: 'https://github.com/decoyphrase', label: 'View on GitHub' },
   { platform: 'forum', href: '#', label: 'Community Forum' },
 ];

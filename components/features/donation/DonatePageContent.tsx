@@ -34,8 +34,9 @@ export function DonatePageContent() {
   const { data } = useQuery<DonationData>({
     queryKey: ['donations'],
     queryFn: () => fetchDonationData(),
-    // Refresh every 5 minutes (user-side)
-    staleTime: 1000 * 60 * 5,
+    // Refresh every 15 seconds (user-side)
+    staleTime: 1000 * 15,
+    refetchInterval: 1000 * 15, // Periodically refetch every 15 seconds
   });
 
   const storageBalance = data?.storage?.usdValue ?? 0;

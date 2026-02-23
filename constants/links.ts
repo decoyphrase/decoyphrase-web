@@ -6,7 +6,7 @@
 export const SOCIAL_LINKS = {
   twitter: 'https://twitter.com/decoyphrase',
   youtube: 'https://youtube.com/@decoyphrase',
-  discord: 'https://discord.gg/eQRBtGz5mA',
+  discord: 'https://discord.gg/q9cYTxtagJ',
   github: 'https://github.com/decoyphrase',
 } as const;
 
